@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>🎶 ChordPro Exporter</title>
+
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .drop-zone {
+        border: 2px dashed #CCC;
+        padding: 20px;
+        width: 80vw;
+        height: 80vh;
+        display: flex;
+        Flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      div {
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="dropZone" class="drop-zone">
+      <h1>🎶 ChordPro Exporter</h1>
+
+      <form
+        id="convertForm"
+        action="/"
+        method="post"
+        enctype="multipart/form-data"
+      >
+
+        <div>
+          <label for="selectAuthor">Author*</label>
+          <select id="selectAuthor" name="selectAuthor" >
+            <option selected>Author</option>
+            {% for author in authors %}
+              <option value="{{ author }}">{{ author }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label for="chofile">ChordPro Input* (.cho, .txt)</label>
+          <input id="chofile" type="file" name="chofile">
+        </div>
+
+        <div>
+          <label for="version">Version</label>
+          <input type="text" name="version" id="version" value="v1.0">
+        </div>
+
+        <input type="submit" value="Convert"/>
+
+        <hr style="margin-top: 20px;">
+
+        <div>
+          <label for="configfile">Config File Input (.json)</label>
+          <input id="configfile" type="file" name="configfile">
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

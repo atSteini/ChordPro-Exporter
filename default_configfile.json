@@ -1,0 +1,148 @@
+{
+    "include": [
+        "modern1",
+        "userconf.json"
+    ],
+    //"settings" : {
+    //},
+    "metadata": {
+        "keys": [
+            "title", "subtitle", "artist", "composer", 
+            "lyricist", "arranger", "album", "copyright", "year",
+            "sorttitle", "key", "time", "tempo", "capo", "duration"
+        ]
+    },
+    "meta": {
+        "_configverson": ["6.031"]
+    },
+    "assets": {},
+    "dates": {
+        "today": {
+            "format": "%Y-%m-%d"
+        }
+    },
+
+
+    "diagrams": {
+        "show": "all",
+        "sorted": false,
+        "suppress": []
+    },
+    "pdf": {
+        "info": {
+            "title": "%{title}"
+        },
+        "papersize": "a4",
+        "even-odd-pages" : 0,
+        // Space between columns, in pt.
+        //"columnspace"  :  20,
+
+        // Page margins.
+        // Note that top/bottom exclude the head/footspace.
+        //"margintop"    :  80,
+        //"marginbottom" :  40,
+        //"marginleft"   :  40,
+        //"marginright"  :  40,
+        "headspace"    :  45,
+        //"footspace"    :  20,
+
+        // Special: head on first page only, add the headspace to
+        // the other pages so they become larger.
+        "head-first-only" : false,
+
+        // Spacings.
+        // Baseline distances as a factor of the font size.
+        //"spacing" : {
+        //    "title"  : 1.2,
+        //    "lyrics" : 1.2,
+        //    "chords" : 1.2,
+        //    "diagramchords" : 1.2,
+        //    "grid"   : 1.2,
+        //    "tab"    : 1.0,
+        //    "toc"    : 1.4,
+        //    "empty"  : 1.0,
+        //},
+        // Note: By setting the font size and spacing for empty lines to
+        // smaller values, you get a fine(r)-grained control over the
+        // spacing between the various parts of the song.
+
+        // Style of chorus.
+        //"chorus" : {
+        //    "indent"     :  0,
+            // Chorus side bar.
+            // Suppress by setting offset and/or width to zero.
+        //    "bar" : {
+        //        "offset" :  8,
+        //        "width"  :  1,
+        //        "color"  : "foreground",
+        //    },
+        //    "tag" : "Chorus",
+            // Recall style: Print the tag using the type.
+            // Alternatively quote the lines of the preceding chorus.
+        //    "recall" : {
+        //        "choruslike" : false,
+        //        "tag"   : "Chorus",
+        //        "type"  : "comment",
+        //        "quote" : false,
+        //    },
+        //},
+
+        // This opens a margin for margin labels.
+        //"labels" : {
+            // Margin width. Default is 0 (no margin labels).
+            // "auto" will automatically reserve a margin if labels are used.
+        //    "width" : "auto",
+            // Alignment for the labels. Default is left.
+        //    "align" : "left",
+            // Alternatively, render labels as comments.
+        //    "comment" : ""        // "comment", "comment_italic" or "comment_box",
+        //},
+
+        // Alternative songlines with chords in a side column.
+        // Value is the column position.
+        // "chordscolumn" : 400,
+        "chordscolumn" :  0,
+        "capoheading": "%{capo|Capo: %{}}",
+        //"titles-directive-ignore" : false,
+        //"grids" : {
+        //    "cellbar" : {
+        //        "width" : 0,
+        //        "color" : "foreground-medium"
+        //    },
+        //    "show": true,
+        //    "symbols" : {
+        //        "color" : "blue"
+        //    },
+        //    "volta" : {
+        //        "span" : 0.7,
+        //        "color" : "blue"
+        //    }
+        //},
+        "formats": {
+            "default": {
+                "title": [ "", "%{title}", "%{page}" ],
+                "subtitle": [ "", "%{subtitle|%{}}", "" ],
+                "footer": [ "%{today}", "%{create_time.1} | %{initials.1} | %{file_ver.1}", "%{page}/%{pages}" ],
+                "background": ""
+            },
+            "title": {
+                "title": [ "", "%{title}", "%{page}" ],
+                "subtitle": [ "", "%{subtitle|%{}}", "" ],
+                "footer": [ "%{today}", "%{create_time.1} | %{initials.1} | %{file_ver.1}", "%{page}/%{pages}" ],
+                "background": ""
+            },
+            "first": {
+                "title": [ "%{title}", "", ""],
+                "subtitle": [ "%{subtitle|%{}|%{artist.1}}", "", "" ],
+                "footer": [ "%{today}", "%{create_time.1} | %{initials.1} | %{file_ver.1}", "%{page}/%{pages}" ],
+                "background": ""
+            }
+        },
+        "fonts" : {
+            "footer" : {
+                "size" : 14
+            }
+        },
+        "showlayout": false
+    }
+}
