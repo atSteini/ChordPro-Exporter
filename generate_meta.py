@@ -18,8 +18,8 @@ meta = {
 
 parser = argparse.ArgumentParser(description="Generate meta data for the use with chordpro files")
 
-parser.add_argument("-m", "--major", action="store_true", help="Is a major update?")
-parser.add_argument("-i", "--initials", type=str, nargs=1, help="Set initials of author", default=initials)
+parser.add_argument("-m", "--major", action="store_true", help="Is a major update?", required=False)
+parser.add_argument("-i", "--initials", type=str, nargs=1, help="Set initials of author", default=initials, required=False)
 
 def generate_meta(user_initials: str, version: str, is_major: bool = None, user_file: str = None, reset: bool = None, update: bool = None):
   global userconf_file, major, initials, reset_version, update_version, meta
