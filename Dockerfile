@@ -10,4 +10,7 @@ COPY . .
 
 EXPOSE 5100
 
+RUN apt-get update
+RUN cpan install chordpro
+
 CMD ["python", "app.py"]
