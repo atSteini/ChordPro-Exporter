@@ -29,6 +29,7 @@ def generate_meta(user_initials: str, version: str, is_major: bool = None, user_
   reset_version = reset if reset else reset_version
   update_version = update if update else update_version
   meta["meta"]["file_ver"] = [version] if version else meta["meta"]["file_ver"]
+  meta["meta"]["initials"] = [initials]
   
   main()
 
@@ -38,6 +39,7 @@ def main():
   try:
     with open(userconf_file, "r") as file:
       data = json.load(file)
+      meta["meta"]["initials"] = [initials]
       
       file_ver = data["meta"]["file_ver"][0]
       if reset_version:
@@ -62,7 +64,6 @@ def main():
         print("No update or reset requested")
 
       meta["meta"]["file_ver"] = [file_ver]
-      meta["meta"]["initials"] = [initials]
   except FileNotFoundError:
     print("userconf.json file not found")
     pass

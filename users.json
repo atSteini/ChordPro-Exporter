@@ -10,7 +10,8 @@
     },
     {
       "name": "Flo S.",
-      "initials": ["F.S."]
+      "initials": ["F.S."],
+      "is_default": true
     }
   ]
 }

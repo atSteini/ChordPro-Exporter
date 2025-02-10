@@ -28,12 +28,32 @@
         cursor: pointer;
       }
 
+      .text-area {
+        width: 100%;
+        height: 100%;
+      }
+
       div {
         margin: 15px 0;
       }
     </style>
   </head>
   <body>
+
+    <div id="writer" class="drop-zone">
+      <h1>📝 Input</h1>
+
+      <form
+        id="textForm"
+        action="/"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <textarea name="choTextInput" id="choTextInput" class="text-area" rows="10" cols="50"></textarea>
+
+        <input type="submit" value="Convert"/>
+      </form>
+    </div>
 
     <div id="dropZone" class="drop-zone">
       <h1>🎶 ChordPro Exporter</h1>
@@ -64,6 +84,10 @@
           <label for="version">Version</label>
           <input type="text" name="version" id="version" value="v1.0">
         </div>
+        <div>
+          <label for="lyricsOnlyChbx">Lyrics Only</label>
+          <input type="checkbox" name="lyricsOnlyChbx" id="lyricsOnlyChbx" value="true">
+        </div>
 
         <input type="submit" value="Convert"/>
 
@@ -75,5 +99,6 @@
         </div>
       </form>
     </div>
+
   </body>
 </html>

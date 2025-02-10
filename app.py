@@ -11,6 +11,7 @@ ALLOWED_CONF = {'json'}
 PORT = 5100
 TO_CONVERT = '' # set in main
 CONF_FILE = 'default_configfile.json'
+CONF_FILE_LYRICS_ONLY = 'lyrics_only_config.json'
 CONF_FILE_UPLOAD = 'configfile_upload.json'
 OUTPUT_FILENAME = "output.pdf"
 FILES_TO_REMOVE = [CONF_FILE_UPLOAD, OUTPUT_FILENAME, "userconf.json"]
@@ -18,12 +19,13 @@ FILES_TO_REMOVE = [CONF_FILE_UPLOAD, OUTPUT_FILENAME, "userconf.json"]
 user_file = 'users.json'
 file_already_downloaded = False
 users = []
+default_user = {"name": "N.A.", "initials": ["N.A."]}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/', methods=['GET', 'POST'])
-def upload_file():
+def convert():
   if request.method == 'POST':
     (error, filename) = savefiles()
 
@@ -32,8 +34,9 @@ def upload_file():
 
     user = get_user(request.form.get('selectAuthor', None))
     version = request.form.get('version', None)
+    lyrics_only = request.form.get('lyricsOnlyChbx', None)
 
-    execute_converter(OUTPUT_FILENAME, user, version)
+    execute_converter(OUTPUT_FILENAME, user, version, lyrics_only)
 
     ret_val = send_file(open(OUTPUT_FILENAME, "rb"), mimetype='pdf', as_attachment=True, download_name=f'{filename}.pdf')
 
@@ -45,16 +48,23 @@ def upload_file():
   
   return render_template('index.html', authors=[o['name'] for o in users])
 
-def execute_converter(filename, user, ver):
-  global CONF_FILE, CONF_FILE_UPLOAD
-  
-  generate_meta.generate_meta(user_initials=user["initials"][0] if user else 'N.A.',
+def execute_converter(filename, user, ver, lyrics_only):
+  global CONF_FILE, CONF_FILE_UPLOAD, default_user
+
+  user_to_use = user if user else default_user
+  print(user_to_use)
+  generate_meta.generate_meta(user_initials=user_to_use["initials"][0],
                               version=ver)
   
   if (CONF_FILE_UPLOAD):
     CONF_FILE = CONF_FILE_UPLOAD
 
-  subprocess.run(['chordpro', TO_CONVERT, '--config', CONF_FILE, '--output', f'{filename}'])
+  command = ['chordpro', TO_CONVERT, '--config', CONF_FILE, '--output', f'{filename}']
+
+  if lyrics_only:
+    command += (['--lyrics-only', '--config', CONF_FILE_LYRICS_ONLY])
+
+  subprocess.run(command)
 
 def get_user(name):
   for user in users:
@@ -63,11 +73,14 @@ def get_user(name):
   return None
 
 def load_users():
-  global users
+  global users, default_user
   print('Loading users...')
   try:
     with open(user_file, 'r') as file:
       users = json.loads(file.read())['users']
+      for user in users:
+        if 'is_default' in user:
+          default_user = user
 
     print('Users loaded')
   except FileNotFoundError:
@@ -82,21 +95,31 @@ def allowed_file(filename, ext):
 def savefiles() -> tuple[str, str]:
   global file_already_downloaded, TO_CONVERT, CONF_FILE_UPLOAD
 
+  by_text = False
+
+  if request.form.get('choTextInput', None):
+    by_text = True
+    with open(TO_CONVERT, 'w') as file:
+      file.write(request.form.get('choTextInput', None))
+    #file_already_downloaded = True
+    filename = 'text'
+
   # ChordPro File
-  if 'chofile' not in request.files:
+  if not by_text and 'chofile' not in request.files:
       return ('No ChordPro part', None)
     
-  if file_already_downloaded:
+  if not by_text and file_already_downloaded:
     return ('File already downloaded', None)
 
-  chofile = request.files['chofile']
+  if not by_text:
+    chofile = request.files['chofile']
 
-  if chofile.filename == '':
-    return ('No ChordPro File submitted', None)
+    if chofile.filename == '':
+      return ('No ChordPro File submitted', None)
 
-  if chofile and allowed_file(chofile.filename, ALLOWED_CHO):
-    filename = secure_filename(chofile.filename)
-    chofile.save(TO_CONVERT)
+    if chofile and allowed_file(chofile.filename, ALLOWED_CHO):
+      filename = secure_filename(chofile.filename)
+      chofile.save(TO_CONVERT)
 
   # Config File
   saved_conf = False
